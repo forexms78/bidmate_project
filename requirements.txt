@@ -1,0 +1,17 @@
+# 기본 유틸리티
+python-dotenv
+pandas
+numpy
+tqdm
+
+# RAG & LLM 프레임워크 (LangChain)
+langchain
+langchain-community
+langchain-openai
+langchain-chroma  # 또는 langchain-faiss
+chromadb          # Vector DB (가볍게 시작하기 좋음)
+
+# 문서 로더 관련 (PDF, HWP 등)
+pypdf
+unstructured
+olefile           # HWP 파일 분석용 (추후 필요 시 추가 라이브러리 설치)

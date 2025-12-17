@@ -1,0 +1,7 @@
+# .gitignore 파일 내용
+.env
+DATA/
+__pycache__/
+.idea/
+.ipynb_checkpoints/
+*.pyc

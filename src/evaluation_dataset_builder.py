@@ -2,7 +2,13 @@ import pandas as pd
 import os
 
 def build_eval_dataset(csv_path):
-    df = pd.read_csv(csv_path, encoding="utf-8", errors="ignore")
+
+    try:
+        df = pd.read_csv(csv_path, encoding="utf-8")
+    except UnicodeDecodeError:
+        # utf-8로 읽기 실패 시 cp949(euc-kr)로 재시도
+        df = pd.read_csv(csv_path, encoding="cp949")
+
     dataset = []
 
     for _, row in df.iterrows():

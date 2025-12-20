@@ -1,20 +1,25 @@
 import os
+import sys
+
+# 경로 설정
+current_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.dirname(current_dir)
+if root_dir not in sys.path:
+    sys.path.append(root_dir)
+
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from dotenv import load_dotenv
-from tqdm import tqdm  # 진행률 표시바
+from tqdm import tqdm
 
-# 기존 모듈 임포트
 from src.vector_db import RFPVectorDB
 from src.generator import RFPGenerator
+from src.data_loader import RFPDataLoader
 
 load_dotenv()
 
-# ==========================================
-# 1. 평가용 데이터셋 (Ground Truth) 준비
-# 실제 데이터에 맞춰 질문과 정답을 늘려나가세요.
-# ==========================================
+# 평가 데이터셋
 TEST_DATASET = [
     {
         "question": "한영대학교 학사정보시스템 고도화 사업의 예산은 얼마인가?",
@@ -32,77 +37,82 @@ TEST_DATASET = [
 
 
 class RFPEvaluator:
-    def __init__(self):
-        # 채점관 모델 (Judge)
+    def __init__(self, retriever=None):
+        """
+        :param retriever: 이미 로드된 검색기가 있다면 재사용 (속도 향상)
+        """
         self.judge_llm = ChatOpenAI(model="gpt-5-mini", temperature=0)
 
-        # 시스템 모듈 로드
-        self.db_manager = RFPVectorDB(db_path="./chroma_db")
-        self.retriever = self.db_manager.get_retriever()
+        # 외부에서 retriever를 주입받으면 그것을 사용, 아니면 새로 구축
+        if retriever:
+            self.retriever = retriever
+            self.db_manager = None  # 외부 주입시 불필요
+        else:
+            # 독립 실행 시 DB 로드 로직
+            csv_path = os.path.join(root_dir, "DATA", "data_list.csv")
+            loader = RFPDataLoader(file_path=csv_path)
+            documents = loader.load()
+
+            self.db_manager = RFPVectorDB(db_path=os.path.join(root_dir, "chroma_db"))
+            self.db_manager.create_vector_db(documents, force_rebuild=True)
+            self.retriever = self.db_manager.get_retriever()
+
         self.generator = RFPGenerator()
 
-    def evaluate(self):
-        print(f"📊 총 {len(TEST_DATASET)}개의 문항에 대해 평가를 시작합니다...")
-
+    def evaluate(self, progress_callback=None):
+        """
+        :param progress_callback: Streamlit 프로그레스 바 업데이트용 함수
+        """
         score = 0
         results = []
 
-        for item in tqdm(TEST_DATASET):
+        total = len(TEST_DATASET)
+
+        for i, item in enumerate(TEST_DATASET):
             question = item['question']
             truth = item['ground_truth']
 
-            # 1. 우리 AI의 답변 생성
+            # 진행률 업데이트 (Streamlit용)
+            if progress_callback:
+                progress_callback(i / total, f"평가 진행 중... ({i + 1}/{total})")
+
+            # 1. 답변 생성
             relevant_docs = self.retriever.invoke(question)
-            # 평가는 단발성 질문이므로 chat_history는 비워둡니다.
             prediction = self.generator.generate_answer(question, relevant_docs, chat_history=[])
 
-            # 2. LLM 채점 (Judge)
+            # 2. 채점
             is_correct = self.judge_answer(question, truth, prediction)
+
+            result_item = {
+                "질문": question,
+                "정답": truth,
+                "AI 답변": prediction,
+                "채점 결과": "✅ 정답" if is_correct else "❌ 오답"
+            }
+            results.append(result_item)
 
             if is_correct:
                 score += 1
-                results.append("✅ 정답")
-            else:
-                results.append("❌ 오답")
 
-            # 디버깅용 출력 (필요 시 주석 해제)
-            # print(f"\nQ: {question}")
-            # print(f"A(AI): {prediction}")
-            # print(f"A(Truth): {truth}")
-            # print(f"Result: {'Pass' if is_correct else 'Fail'}")
+        # 완료 시 진행률 100%
+        if progress_callback:
+            progress_callback(1.0, "평가 완료!")
 
-        # 최종 리포트
-        accuracy = (score / len(TEST_DATASET)) * 100
-        print("\n" + "=" * 30)
-        print("      🏆 평가 결과 리포트      ")
-        print("=" * 30)
-        print(f"총 문항 수 : {len(TEST_DATASET)}")
-        print(f"정답 수   : {score}")
-        print(f"오답 수   : {len(TEST_DATASET) - score}")
-        print(f"최종 정확도 : {accuracy:.2f}%")
-        print("=" * 30)
+        accuracy = (score / total) * 100
+        return accuracy, results
 
     def judge_answer(self, question, truth, prediction):
-        """
-        AI 답변이 정답과 의미적으로 일치하는지 LLM에게 물어봅니다.
-        """
         judge_prompt = ChatPromptTemplate.from_messages([
-            ("system", "당신은 공정한 채점관입니다. [AI 답변]이 [정답]의 핵심 내용을 정확히 포함하고 있는지 판단하세요. "
-                       "형식이 달라도 핵심 정보(숫자, 기관명 등)가 맞으면 정답입니다. "
-                       "정답이면 'YES', 오답이면 'NO'라고만 대답하세요."),
+            ("system", "당신은 채점관입니다. [AI 답변]이 [정답]의 핵심 정보(기관명, 숫자 등)를 포함하면 'YES', 아니면 'NO'를 출력하세요."),
             ("human", "질문: {question}\n정답: {truth}\nAI 답변: {prediction}")
         ])
-
         chain = judge_prompt | self.judge_llm | StrOutputParser()
-        result = chain.invoke({
-            "question": question,
-            "truth": truth,
-            "prediction": prediction
-        })
-
+        result = chain.invoke({"question": question, "truth": truth, "prediction": prediction})
         return "YES" in result.upper()
 
 
 if __name__ == "__main__":
+    # 터미널에서 단독 실행 시
     evaluator = RFPEvaluator()
-    evaluator.evaluate()
+    acc, res = evaluator.evaluate()
+    print(f"정확도: {acc}%")

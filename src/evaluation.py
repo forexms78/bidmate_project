@@ -16,25 +16,13 @@ from tqdm import tqdm
 from src.vector_db import RFPVectorDB
 from src.generator import RFPGenerator
 from src.data_loader import RFPDataLoader
+from src.evaluation_dataset_builder import build_eval_dataset
 
 load_dotenv()
 
 # 평가 데이터셋
-TEST_DATASET = [
-    {
-        "question": "한영대학교 학사정보시스템 고도화 사업의 예산은 얼마인가?",
-        "ground_truth": "130,000,000원 (1억 3천만 원)"
-    },
-    {
-        "question": "부산국제영화제 온라인서비스 재개발 사업의 발주 기관은 어디인가?",
-        "ground_truth": "(사)부산국제영화제"
-    },
-    {
-        "question": "이 프로젝트에서 다루는 문서의 종류는 무엇인가?",
-        "ground_truth": "제안요청서(RFP)"
-    }
-]
-
+csv_path = os.path.join(root_dir, "DATA", "data_list.csv")
+TEST_DATASET = build_eval_dataset(csv_path)
 
 class RFPEvaluator:
     def __init__(self, retriever=None):

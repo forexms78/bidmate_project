@@ -25,25 +25,31 @@ class RFPDataLoader:
             if pd.isna(content) or str(content).strip() == "":
                 continue
 
-            # [핵심 변경 사항] 메타데이터를 텍스트 본문에 '주입'합니다.
-            # 이렇게 하면 "부산국제영화제 사업 찾아줘"라고 했을 때 검색이 훨씬 잘 됩니다.
+            # 파일명에서 확장자 추출 (예: 입찰공고.hwp -> hwp)
+            file_name = str(row.get('파일명', ''))
+            file_ext = file_name.split('.')[-1] if '.' in file_name else '알수없음'
+
+            # [핵심] 메타데이터를 본문에 강력하게 주입
             augmented_content = (
-                f"문서 정보:\n"
-                f"- 발주 기관: {row.get('발주 기관', '알수없음')}\n"
-                f"- 사업명: {row.get('사업명', '무제')}\n"
-                f"- 사업 금액: {row.get('사업 금액', '0')}원\n"
-                f"- 공고 번호: {row.get('공고 번호', '-')}\n"
-                f"\n[본문 내용]\n{content}"
+                f"[[문서 메타데이터]]\n"
+                f"1. 사업명: {row.get('사업명', '무제')}\n"
+                f"2. 발주 기관: {row.get('발주 기관', '알수없음')}\n"
+                f"3. 사업 금액(예산): {row.get('사업 금액', '0')}원\n"
+                f"4. 문서 형식(확장자): {file_ext}\n"  # <--- 이 부분이 정답률을 높입니다.
+                f"5. 공고 번호: {row.get('공고 번호', '-')}\n"
+                f"--------------------------------\n"
+                f"[본문 내용]\n{content}"
             )
 
             metadata = {
-                "source": row.get('파일명', 'unknown'),
+                "source": file_name,
                 "title": row.get('사업명', '무제'),
                 "agency": row.get('발주 기관', '알수없음'),
+                "extension": file_ext
             }
 
             doc = Document(page_content=augmented_content, metadata=metadata)
             docs.append(doc)
 
-        print(f"✅ 데이터 로드 완료! (메타데이터 주입됨)")
+        print(f"✅ 데이터 로드 완료! (확장자 정보 포함됨)")
         return docs

@@ -29,7 +29,7 @@ class RFPEvaluator:
         """
         :param retriever: 이미 로드된 검색기가 있다면 재사용 (속도 향상)
         """
-        self.judge_llm = ChatOpenAI(model="gpt-5-mini", temperature=0)
+        self.judge_llm = ChatOpenAI(model="gpt-5", temperature=0)
 
         # 외부에서 retriever를 주입받으면 그것을 사용, 아니면 새로 구축
         if retriever:

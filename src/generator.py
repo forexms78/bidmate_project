@@ -7,7 +7,7 @@ from langchain_core.runnables import RunnablePassthrough
 
 class RFPGenerator:
     def __init__(self):
-        self.llm = ChatOpenAI(model="gpt-5-mini", temperature=0)
+        self.llm = ChatOpenAI(model="gpt-5", temperature=0)
         self.prompt = ChatPromptTemplate.from_messages([
             ("system", """
             당신은 공공 입찰 제안요청서(RFP) 전문 분석가입니다. 

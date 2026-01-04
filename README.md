@@ -1,12 +1,3 @@
-네, 프로젝트의 핵심 기능(이원화된 RAG, 평가 시스템, 대시보드)이 잘 드러나면서도, **요즘 깃허브 트렌드에 맞는 깔끔하고 세련된 스타일**로 `README.md`를 작성해 드립니다.
-
-아래 내용을 복사해서 `README.md` 파일에 붙여넣으세요. (괄호로 표시된 부분만 본인 상황에 맞게 조금 수정하시면 됩니다.)
-
----
-
-## 📋 README.md 소스 코드
-
-```markdown
 # 🏢 입찰메이트 (BidMate) - Integrated RAG Dashboard
 
 <div align="center">
@@ -55,7 +46,7 @@
 
 ## 🛠️ System Architecture
 
-```mermaid
+
 graph LR
     A[RFP Documents] --> B(RFP Data Loader)
     B --> C{Vector DB Builder}

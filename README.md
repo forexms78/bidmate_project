@@ -109,6 +109,7 @@ Developed by <b>BidMate Team</b> | Powered by LangChain & Streamlit
 
 ```
 보고서
-[BidMate_Project_Full_Report.pdf](https://github.com/user-attachments/files/24421202/BidMate_Project_Full_Report.pdf)
+
+[BidMate_Project_Full_Report.pdf](https://github.com/user-attachments/files/24421214/BidMate_Project_Full_Report.pdf)
 
 ```

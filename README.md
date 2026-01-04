@@ -46,17 +46,6 @@
 
 ## 🛠️ System Architecture
 
-mermaid
-graph LR
-    A[RFP Documents] --> B(RFP Data Loader)
-    B --> C{Vector DB Builder}
-    C -->|API Mode| D[ChromaDB (Main)]
-    C -->|Local Mode| E[ChromaDB (Local)]
-    D --> F[GPT Generator]
-    E --> G[Local Generator]
-    F & G --> H[Streamlit Dashboard]
-    H --> I[Performance Evaluator]
-
 ```
 
 ## 🚀 Quick Start
@@ -109,7 +98,9 @@ streamlit run app.py
 ## 📝 License 및 협업일지
 
 This project is licensed under the **MIT License**.
+
 https://www.notion.so/2de5df876c2080b8a979dc1cbbbbcc2a?source=copy_link
+
 ---
 
 <div align="center">

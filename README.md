@@ -21,7 +21,7 @@
 ## 📸 Dashboard Preview
 
 > *(여기에 실행 화면 스크린샷이나 GIF를 넣어주세요. 예: `assets/demo.gif`)*
-> ![Dashboard Screenshot](./assets/dashboard_screenshot.png)
+<img width="1914" height="904" alt="스크린샷 2026-01-04 190958" src="https://github.com/user-attachments/assets/437dfb77-ff22-4871-b72b-d528c858be05" />
 
 <br>
 
@@ -113,23 +113,7 @@ This project is licensed under the **MIT License**.
 ---
 
 <div align="center">
-Developed by <b>BidMate Team</b> | Powered by LangChain & Streamlit
+Developed by <b>codit 03 Team</b> | Powered by LangChain & Streamlit
 </div>
-
-```
-
------
-
-### 💡 더 멋있게 만드는 꿀팁 (이건 꼭 하세요\!)
-
-1.  **스크린샷 추가 (필수):**
-      * `assets`라는 폴더를 만들고, 앱 실행 화면을 캡처해서 `dashboard_screenshot.png`라는 이름으로 저장해 넣으세요.
-      * 글자보다 **사진 한 장**이 프로젝트를 10배 더 있어 보이게 만듭니다.
-2.  **배지(Badges) 활용:**
-      * 제가 넣어드린 `shields.io` 배지는 깃허브에서 아주 예쁘게 렌더링 됩니다. 기술 스택을 한눈에 보여줍니다.
-3.  **Mermaid 차트:**
-      * `System Architecture` 부분에 제가 넣어드린 코드는 깃허브에서 \*\*자동으로 다이어그램(순서도)\*\*으로 변환되어 보입니다. 아주 전문적으로 보일 겁니다.
-
-이대로 올리시면 포트폴리오로 쓰기에도 손색없을 겁니다\!
 
 ```

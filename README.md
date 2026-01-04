@@ -20,7 +20,6 @@
 
 ## 📸 Dashboard Preview
 
-> *(여기에 실행 화면 스크린샷이나 GIF를 넣어주세요. 예: `assets/demo.gif`)*
 <img width="1914" height="904" alt="스크린샷 2026-01-04 190958" src="https://github.com/user-attachments/assets/437dfb77-ff22-4871-b72b-d528c858be05" />
 
 <br>
@@ -45,17 +44,6 @@
 <br>
 
 ## 🛠️ System Architecture
-
-
-graph LR
-    A[RFP Documents] --> B(RFP Data Loader)
-    B --> C{Vector DB Builder}
-    C -->|API Mode| D[ChromaDB (Main)]
-    C -->|Local Mode| E[ChromaDB (Local)]
-    D --> F[GPT Generator]
-    E --> G[Local Generator]
-    F & G --> H[Streamlit Dashboard]
-    H --> I[Performance Evaluator]
 
 ```
 

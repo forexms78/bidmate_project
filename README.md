@@ -61,7 +61,54 @@ pip install -r requirements.txt
 
 ```
 
-### 2. Configurati서보보[BidMate_Project_Full_Report.pdf](https://github.com/user-attachments/files/24421202/BidMate_Project_Full_Report.pdf)
+### 2. Configuration
 
+`.env` 파일을 생성하고 API 키를 설정합니다.
+
+```bash
+OPENAI_API_KEY=sk-proj-...
+
+```
+
+### 3. Run Application
+
+Streamlit 대시보드를 실행합니다.
+
+```bash
+streamlit run app.py
+
+```
+
+## 📂 Directory Structure
+
+```bash
+├── app.py                  # 메인 대시보드 실행 파일
+├── src/
+│   ├── data_loader.py      # HWP/PDF 로더 및 메타데이터 처리
+│   ├── vector_db.py        # ChromaDB 구축 및 관리
+│   ├── generator.py        # LLM 답변 생성 로직
+│   ├── evaluation.py       # 정답 채점 및 평가 모듈
+│   └── evaluation_dataset_builder.py # 평가 데이터셋 생성기
+├── local_src/              # 로컬 LLM 관련 모듈
+├── DATA/                   # 제안요청서 원본 데이터
+└── requirements.txt        # 의존성 패키지 목록
+
+```
+
+## 📝 License 및 협업일지
+
+This project is licensed under the **MIT License**.
+
+https://www.notion.so/2de5df876c2080b8a979dc1cbbbbcc2a?source=copy_link
+
+---
+
+<div align="center">
+Developed by <b>BidMate Team</b> | Powered by LangChain & Streamlit
+</div>
+
+```
+보고서
+[BidMate_Project_Full_Report.pdf](https://github.com/user-attachments/files/24421202/BidMate_Project_Full_Report.pdf)
 
 ```

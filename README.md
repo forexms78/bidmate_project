@@ -1,3 +1,4 @@
+```markdown
 # 🏢 입찰메이트 (BidMate) - Integrated RAG Dashboard
 
 <div align="center">
@@ -20,7 +21,8 @@
 
 ## 📸 Dashboard Preview
 
-<img width="1914" height="904" alt="스크린샷 2026-01-04 190958" src="https://github.com/user-attachments/assets/437dfb77-ff22-4871-b72b-d528c858be05" />
+> *(여기에 실행 화면 스크린샷이나 GIF를 넣어주세요. 예: `assets/demo.gif`)*
+> ![Dashboard Screenshot](./assets/dashboard_screenshot.png)
 
 <br>
 
@@ -45,30 +47,53 @@
 
 ## 🛠️ System Architecture
 
-🚀 Quick Start
-1. Installation
+```mermaid
+graph LR
+    A[RFP Documents] --> B(RFP Data Loader)
+    B --> C{Vector DB Builder}
+    C -->|API Mode| D[ChromaDB (Main)]
+    C -->|Local Mode| E[ChromaDB (Local)]
+    D --> F[GPT Generator]
+    E --> G[Local Generator]
+    F & G --> H[Streamlit Dashboard]
+    H --> I[Performance Evaluator]
+
+```
+
+## 🚀 Quick Start
+
+### 1. Installation
+
 프로젝트를 클론하고 필수 패키지를 설치합니다.
 
-Bash
-
+```bash
 git clone [https://github.com/your-username/bidmate-rag.git](https://github.com/your-username/bidmate-rag.git)
 cd bidmate-rag
 pip install -r requirements.txt
-2. Configuration
-.env 파일을 생성하고 API 키를 설정합니다.
 
-Bash
+```
 
+### 2. Configuration
+
+`.env` 파일을 생성하고 API 키를 설정합니다.
+
+```bash
 OPENAI_API_KEY=sk-proj-...
-3. Run Application
+
+```
+
+### 3. Run Application
+
 Streamlit 대시보드를 실행합니다.
 
-Bash
-
+```bash
 streamlit run app.py
-📂 Directory Structure
-Bash
 
+```
+
+## 📂 Directory Structure
+
+```bash
 ├── app.py                  # 메인 대시보드 실행 파일
 ├── src/
 │   ├── data_loader.py      # HWP/PDF 로더 및 메타데이터 처리
@@ -79,11 +104,33 @@ Bash
 ├── local_src/              # 로컬 LLM 관련 모듈
 ├── DATA/                   # 제안요청서 원본 데이터
 └── requirements.txt        # 의존성 패키지 목록
-📝 License
-This project is licensed under the MIT License.
 
-<div align="center"> Developed by <b>BidMate Team</b> | Powered by LangChain & Streamlit </div>
+```
 
-협업일지
-[
-](https://www.notion.so/2de5df876c2080b8a979dc1cbbbbcc2a?source=copy_link)
+## 📝 License
+
+This project is licensed under the **MIT License**.
+
+---
+
+<div align="center">
+Developed by <b>BidMate Team</b> | Powered by LangChain & Streamlit
+</div>
+
+```
+
+-----
+
+### 💡 더 멋있게 만드는 꿀팁 (이건 꼭 하세요\!)
+
+1.  **스크린샷 추가 (필수):**
+      * `assets`라는 폴더를 만들고, 앱 실행 화면을 캡처해서 `dashboard_screenshot.png`라는 이름으로 저장해 넣으세요.
+      * 글자보다 **사진 한 장**이 프로젝트를 10배 더 있어 보이게 만듭니다.
+2.  **배지(Badges) 활용:**
+      * 제가 넣어드린 `shields.io` 배지는 깃허브에서 아주 예쁘게 렌더링 됩니다. 기술 스택을 한눈에 보여줍니다.
+3.  **Mermaid 차트:**
+      * `System Architecture` 부분에 제가 넣어드린 코드는 깃허브에서 \*\*자동으로 다이어그램(순서도)\*\*으로 변환되어 보입니다. 아주 전문적으로 보일 겁니다.
+
+이대로 올리시면 포트폴리오로 쓰기에도 손색없을 겁니다\!
+
+```

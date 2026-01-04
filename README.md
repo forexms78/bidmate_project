@@ -1,4 +1,4 @@
-```markdown
+
 # 🏢 입찰메이트 (BidMate) - Integrated RAG Dashboard
 
 <div align="center">
@@ -47,7 +47,7 @@
 
 ## 🛠️ System Architecture
 
-```mermaid
+mermaid
 graph LR
     A[RFP Documents] --> B(RFP Data Loader)
     B --> C{Vector DB Builder}

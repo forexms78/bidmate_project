@@ -100,7 +100,7 @@ streamlit run app.py
 This project is licensed under the **MIT License**.
 
 https://www.notion.so/2de5df876c2080b8a979dc1cbbbbcc2a?source=copy_link
-
+https://www.notion.so/01-2a0979eab5998069941ef16fd8906e78
 ---
 
 <div align="center">
